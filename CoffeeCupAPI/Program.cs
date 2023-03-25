@@ -1,18 +1,28 @@
-﻿global using Microsoft.EntityFrameworkCore;
+﻿global using CoffeeCupAPI.Dtos;
 global using CoffeeCupAPI.Models;
+global using CoffeeCupAPI.Controllers;
+global using CoffeeCupAPI.Services.CoffeeCupService;
+global using AutoMapper;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// register the DataContext
+// register the service
+builder.Services.AddScoped<ICoffeeCupService, CoffeeCupService>();
+
+// register the context
 builder.Services.AddDbContext<CoffeeCupContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeCupContext")));
+
+// register the AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

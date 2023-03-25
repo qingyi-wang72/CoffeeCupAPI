@@ -13,111 +13,60 @@ namespace CoffeeCupAPI.Controllers
     [ApiController]
     public class CoffeeCupsController : ControllerBase
     {
-        private readonly CoffeeCupContext _context;
+        private readonly ICoffeeCupService _coffeeCupService;
 
-        public CoffeeCupsController(CoffeeCupContext context)
+        public CoffeeCupsController(ICoffeeCupService coffeeCupService)
         {
-            _context = context;
+            _coffeeCupService = coffeeCupService;
         }
 
         // GET: api/CoffeeCups
+        // List all the CoffeeCups
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CoffeeCup>>> GetCoffeeCups()
+        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> GetCoffeeCups()
         {
-            if (_context.CoffeeCups == null)
-            {
-                return NotFound();
-            }
-            return await _context.CoffeeCups.ToListAsync();
+            return Ok(await _coffeeCupService.GetCoffeeCups());
         }
 
-        // GET: api/CoffeeCups/5
+        // GET: api/CoffeeCups/{id}
+        // List the corresponding coffee cup by the given id
         [HttpGet("{id}")]
-        public async Task<ActionResult<CoffeeCup>> GetCoffeeCup(int id)
+        public async Task<ActionResult<ServiceResponse<CoffeeCup>>> GetCoffeeCup(int id)
         {
-          if (_context.CoffeeCups == null)
-          {
-              return NotFound();
-          }
-            var coffeeCup = await _context.CoffeeCups.FindAsync(id);
-
-            if (coffeeCup == null)
-            {
-                return NotFound();
-            }
-
-            return coffeeCup;
+            var serResult = await _coffeeCupService.GetCoffeeCup(id);
+            if (serResult.Data is null)
+                return NotFound(serResult);
+            return Ok(serResult);
         }
 
-        // PUT: api/CoffeeCups/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/CoffeeCups/{id}
+        // Update the corresponding coffee cup by the given id
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCoffeeCup(int id, CoffeeCup coffeeCup)
+        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> UpdateCoffeeCup(int id, [FromBody]PutCoffeeCupDto coffeeCup)
         {
-            if (id != coffeeCup.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(coffeeCup).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CoffeeCupExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var serResult = await _coffeeCupService.UpdateCoffeeCup(id, coffeeCup);
+            if (serResult.Data is null)
+                return NotFound(serResult);
+            return Ok(serResult);
         }
 
         // POST: api/CoffeeCups
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // add a new coffee cup
         [HttpPost]
-        public async Task<ActionResult<CoffeeCup>> PostCoffeeCup(CoffeeCup coffeeCup)
+        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> AddCoffeeCup([FromBody]PostCoffeeCupDto coffeeCup)
         {
-          if (_context.CoffeeCups == null)
-          {
-              return Problem("Entity set 'CoffeeCupContext.CoffeeCups'  is null.");
-          }
-            _context.CoffeeCups.Add(coffeeCup);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCoffeeCup", new { id = coffeeCup.Id }, coffeeCup);
+            return Ok(await _coffeeCupService.AddCoffeeCup(coffeeCup));
         }
 
-        // DELETE: api/CoffeeCups/5
+        // DELETE: api/CoffeeCups/{id}
+        // delete the corresponding coffee cup by the given id
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCoffeeCup(int id)
+        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> DeleteCoffeeCup(int id)
         {
-            if (_context.CoffeeCups == null)
-            {
-                return NotFound();
-            }
-            var coffeeCup = await _context.CoffeeCups.FindAsync(id);
-            if (coffeeCup == null)
-            {
-                return NotFound();
-            }
-
-            _context.CoffeeCups.Remove(coffeeCup);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CoffeeCupExists(int id)
-        {
-            return (_context.CoffeeCups?.Any(e => e.Id == id)).GetValueOrDefault();
+            var serResult = await _coffeeCupService.DeleteCoffeeCup(id);
+            if (serResult.Data is null)
+                return NotFound(serResult);
+            return Ok(serResult);
         }
     }
 }
