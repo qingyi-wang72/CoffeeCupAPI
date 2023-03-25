@@ -23,9 +23,13 @@ namespace CoffeeCupAPI.Controllers
         // GET: api/CoffeeCups
         // List all the CoffeeCups
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> GetCoffeeCups()
+        public async Task<IActionResult> GetCoffeeCups()
         {
-            return Ok(await _coffeeCupService.GetCoffeeCups());
+            var serResult = await _coffeeCupService.GetCoffeeCups();
+
+            if (serResult.Any())
+                return Ok(serResult);
+            return NotFound();
         }
 
         // GET: api/CoffeeCups/{id}

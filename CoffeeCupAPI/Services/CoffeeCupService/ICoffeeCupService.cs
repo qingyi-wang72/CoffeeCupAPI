@@ -4,7 +4,7 @@
 	{
         // GET: api/CoffeeCups
         // List all the CoffeeCups
-        Task<ServiceResponse<List<CoffeeCup>>> GetCoffeeCups();
+        Task<List<CoffeeCup>> GetCoffeeCups();
 
         // GET: api/CoffeeCups/{id}
         // List the corresponding coffee cup by the given id

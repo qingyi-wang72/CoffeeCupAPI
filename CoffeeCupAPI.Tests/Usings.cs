@@ -1,0 +1,9 @@
+﻿global using Xunit;
+global using Moq;
+global using FluentAssertions;
+global using System.Threading.Tasks;
+global using Microsoft.AspNetCore.Mvc;
+global using CoffeeCupAPI.Models;
+global using CoffeeCupAPI.Controllers;
+global using CoffeeCupAPI.Services.CoffeeCupService;
+global using CoffeeCupAPI.Tests.Fixtures;

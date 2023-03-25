@@ -14,13 +14,15 @@
         // GET: api/CoffeeCups
         // List all the CoffeeCups
         [HttpGet]
-        public async Task<ServiceResponse<List<CoffeeCup>>> GetCoffeeCups()
+        public async Task<List<CoffeeCup>> GetCoffeeCups()
         {
-            var serResponse = new ServiceResponse<List<CoffeeCup>>();
+            //var serResponse = new ServiceResponse<List<CoffeeCup>>();
+            //var coffeeCups = await _context.CoffeeCups.ToListAsync();
+            //serResponse.Data = coffeeCups;
+            //serResponse.Message = "Successfully get all the coffee cups";
+            //return serResponse;
             var coffeeCups = await _context.CoffeeCups.ToListAsync();
-            serResponse.Data = coffeeCups;
-            serResponse.Message = "Successfully get all the coffee cups";
-            return serResponse;
+            return coffeeCups;
         }
 
         // GET: api/CoffeeCups/{id}
