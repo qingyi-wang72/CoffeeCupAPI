@@ -51,7 +51,7 @@ See [POST/PUT request body format](#POST/PUT-request-body-format)
         "stock": 5,
         "price": 5.99
         }
-        // ... more data
+        /* ... more data */
     ],
     "success": true,
     "message": "Successfully add a coffee cup"
@@ -124,7 +124,7 @@ None
         "stock": 200,
         "price": 4.99
         },
-        // ... more data
+        /* ... more data */
     ],
     "success": true,
     "message": "Successfully get all the coffee cups"
@@ -159,7 +159,7 @@ See [POST/PUT request body format](#POST/PUT-request-body-format)
         "stock": 5,
         "price": 3.99
         }
-        // ... more data
+        /* ... more data */
     ],
     "success": true,
     "message": "Successfully update the coffee cup with id 6"
@@ -204,7 +204,7 @@ Delete /api/CoffeeCups/:id
         "stock": 200,
         "price": 4.99
         }
-        // ... more data
+        /* ... more data */
     ],
     "success": true,
     "message": "Successfully detele a coffee cup with id 6"
