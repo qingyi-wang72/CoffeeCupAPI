@@ -19,6 +19,7 @@
             var serResponse = new ServiceResponse<List<CoffeeCup>>();
             var coffeeCups = await _context.CoffeeCups.ToListAsync();
             serResponse.Data = coffeeCups;
+            serResponse.Message = "Successfully get all the coffee cups";
             return serResponse;
         }
 
@@ -33,8 +34,9 @@
             {
                 var coffeeCup = await _context.CoffeeCups.FindAsync(id);
                 if (coffeeCup is null)
-                    throw new Exception($"coffeeCup with id {id} not found");
+                    throw new Exception($"GET error: coffeeCup with id {id} not found");
                 serResponse.Data = coffeeCup;
+                serResponse.Message = $"Successfully get the coffee cup with id {id}";
             }
             catch (Exception ex)
             {
@@ -56,7 +58,7 @@
             {
                 var coffeeCup = await _context.CoffeeCups.FindAsync(id);
                 if (coffeeCup is null)
-                    throw new Exception($"coffeeCup with id {id} not found");
+                    throw new Exception($"PUT error: coffeeCup with id {id} not found");
 
                 coffeeCup.Name = reqCoffeeCup.Name;
                 coffeeCup.Color = reqCoffeeCup.Color;
@@ -68,7 +70,7 @@
                 await _context.SaveChangesAsync();
                 var coffeeCups = await _context.CoffeeCups.ToListAsync();
                 serResponse.Data = coffeeCups;
-
+                serResponse.Message = $"Successfully update the coffee cup with id {id}";
             }
             catch (Exception ex)
             {
@@ -91,6 +93,7 @@
 
             var coffeeCups = await _context.CoffeeCups.ToListAsync();
             serResponse.Data = coffeeCups;
+            serResponse.Message = $"Successfully add a coffee cup";
 
             return serResponse;
         }
@@ -106,14 +109,14 @@
             {
                 var coffeeCup = await _context.CoffeeCups.FindAsync(id);
                 if (coffeeCup is null)
-                    throw new Exception($"coffeeCup with id {id} not found");
+                    throw new Exception($"DELETE error: coffeeCup with id {id} not found");
 
                 _context.CoffeeCups.Remove(coffeeCup);
                 await _context.SaveChangesAsync();
 
                 var coffeeCups = await _context.CoffeeCups.ToListAsync();
                 serResponse.Data = coffeeCups;
-
+                serResponse.Message = $"Successfully detele a coffee cup with id {id}";
             }
             catch (Exception ex)
             {

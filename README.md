@@ -1,147 +1,237 @@
 # CoffeeCupAPI
 
-#### Table of Content
+This is a task about creating a coffee cup as an object and making a web api which serves coffee cups based on uers' requests.
+
+## Table of Content
 - [Entity Definition](#Entity-Definition)
 - [API Endpoints Definition](#API-Endpoints-Definition)
+- [POST/PUT request body format](#POST/PUT-request-body-format)
 
 ## Entity Definition
 
-<details>
- <summary>CoffeeCup</summary>
-
-##### Attributes
-
-- **Id** `int`
-_Product id_
-
-- **Name** `string`
-_Product name_
-
-- **Color** `string`
-_Product color_
-
-- **Material** `string`
-_Product material_
-
-- **Description** `string`
-_Product description_
-
-- **Stock** `int`
-_Inventory of products_
-
-- **Price** `float`
-_Individual product price_
-
-</details>
-
+### CoffeeCup
+- **Id**: product id `int`
+- **Name**: product name `string`
+- **Color**: product color `string`
+- **Material**: product material `string`
+- **Description**: product description `string`
+- **Stock**: inventory of products `int`
+- **Price**: individual product price `float`
 
 ## API Endpoints Definition
 
-#### Create a coffee cup
+- [Create a coffee cup](#Create-a-coffee-cup)
+- [List a coffee cup](#List-a-coffee-cup)
+- [List all the coffee cups](#List-all-the-coffee-cups)
+- [Update a coffee cup](#Update-a-coffee-cup)
+- [Delete a coffee cup](#Delete-a-coffee-cup)
 
-<details>
- <summary><code>POST</code> <code><b>/</b></code></summary>
+### Create a coffee cup
+Create a new coffee cup product.
 
-##### Parameters
+```js
+POST /api/CoffeeCups
+```
 
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | None      |  required | object (JSON or YAML)   | See [POST/PUT request body format](#POST/PUT-request-body-format)  |
+##### Parameters 
+See [POST/PUT request body format](#POST/PUT-request-body-format)
+
+##### Response
+- **Code**: 200
+- **Content**:
+    ```json
+    {
+    "data": [
+        {
+        "id": 6,
+        "name": "Recyclable cup",
+        "color": "Green",
+        "material": "Plastic",
+        "description": "vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam",
+        "stock": 5,
+        "price": 5.99
+        }
+        // ... more data
+    ],
+    "success": true,
+    "message": "Successfully add a coffee cup"
+    }
+    ```
+
+### List a coffee cup
+List the corresponding coffee cup by the given id.
+
+```js
+GET /api/CoffeeCups/:id
+```
+
+##### Parameters 
+- **Id**: product id `int` _(required)_
+
+##### Response
+###### Success response
+- **Code**: 200
+- **Content**:
+    ```js
+    {
+    "data": {
+        "id": 6,
+        "name": "Recyclable cup",
+        "color": "Green",
+        "material": "Plastic",
+        "description": "vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam",
+        "stock": 5,
+        "price": 5.99
+    },
+    "success": true,
+    "message": "Successfully get the coffee cup with id 6"
+    }
+    ```
+
+###### Error Response
+- **Code**: 404
+- **Content**:
+    ```json
+    {
+    "data": null,
+    "success": false,
+    "message": "GET error: coffeeCup with id 10 not found"
+    }
+    ```
+
+### List all the coffee cups
+List all the coffee cups.
+
+```js
+GET /api/CoffeeCups
+```
+
+##### Parameters 
+None
+
+##### Response
+- **Code**: 200
+- **Content**:
+    ```js
+    {
+    "data": [
+        {
+        "id": 3,
+        "name": "Bunny Cup",
+        "color": "White",
+        "material": "Ceramic",
+        "description": "convallis convallis tellus id interdum velit laoreet id donec ultrices",
+        "stock": 200,
+        "price": 4.99
+        },
+        // ... more data
+    ],
+    "success": true,
+    "message": "Successfully get all the coffee cups"
+    }
+    ```
+
+### Update a coffee cup
+Update the corresponding coffee cup by the given id.
+
+```js
+PUT /api/CoffeeCups/:id
+```
+
+##### Parameters 
+- **Id**: product id `int` _(required)_
+
+See [POST/PUT request body format](#POST/PUT-request-body-format)
+
+##### Response
+###### Success response
+- **Code**: 200
+- **Content**:
+    ```json
+    {
+    "data": [
+        {
+        "id": 6,
+        "name": "Recyclable cup",
+        "color": "Green",
+        "material": "Plastic",
+        "description": "vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam",
+        "stock": 5,
+        "price": 3.99
+        }
+        // ... more data
+    ],
+    "success": true,
+    "message": "Successfully update the coffee cup with id 6"
+    }
+    ```
+
+###### Error response
+- **Code**: 404
+- **Content**:
+    ```json
+    {
+    "data": null,
+    "success": false,
+    "message": "PUT error: coffeeCup with id 10 not found"
+    }
+    ```
+
+### Delete a coffee cup
+Delete the corresponding coffee cup by the given id.
+
+```js
+Delete /api/CoffeeCups/:id
+```
+
+##### Parameters 
+- **Id**: product id `int` _(required)_
+
+##### Response
+
+###### Success response
+- **Code**: 200
+- **Content**:
+    ```json
+    {
+    "data": [
+        {
+        "id": 3,
+        "name": "Bunny Cup",
+        "color": "White",
+        "material": "Ceramic",
+        "description": "convallis convallis tellus id interdum velit laoreet id donec ultrices",
+        "stock": 200,
+        "price": 4.99
+        }
+        // ... more data
+    ],
+    "success": true,
+    "message": "Successfully detele a coffee cup with id 6"
+    }
+    ```
+
+###### Error response
+- **Code**: 404
+- **Content**:
+    ```json
+    {
+    "data": null,
+    "success": false,
+    "message": "DELETE error: coffeeCup with id 10 not found"
+    }
+    ```
 
 
-##### Responses
-
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `text/plain;charset=UTF-8`        | YAML string  |
-</details>
-
-
-#### List existing coffee cups
-
-<details>
- <summary><code>GET</code> <code>/</code></summary>
- List all the coffee cups.
-
-##### Parameters
-
-> None
-##### Responses
-
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `text/plain;charset=UTF-8`        | YAML string  |
-</details>
-
-<details>
- <summary><code>GET</code> <code>/{id}</code></summary>
- List the corresponding coffee cup by the given product ID.
-
-##### Parameters
-
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | id      |  required   | int   | Product ID                         |
-
-##### Responses
-
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `text/plain;charset=UTF-8`        | YAML string  |
-</details>
-
-
-#### Update existing coffee cups
-
-<details>
- <summary><code>PUT</code> <code>/{id}</code></summary>
- Update the corresponding coffee cup by the given product ID.
-
-##### Parameters
-
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | id      |  required   | int                     | Product ID       |
-> | None    |  required   | object (JSON or YAML)   | See [POST/PUT request body format](#POST/PUT-request-body-format)  |
-
-##### Responses
-
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `text/plain;charset=UTF-8`        | YAML string  |
-</details>
-
-
-#### Delete existing coffee cups
-
-<details>
- <summary><code>DELETE</code> <code>/{id}</code></summary>
- Delete the corresponding coffee cup by the given product ID.
-
-##### Parameters
-
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | id      |  required   | int                     | Product ID       |
-
-##### Responses
-
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `text/plain;charset=UTF-8`        | YAML string  |
-</details>
-
-------------------------------------------------------------------------------------------
-
-#### POST/PUT request body format
+## POST/PUT request body format
 
 ```json
 {
-    "name": "Bunny Coffee Cup",
-    "color": "White",
-    "material": "ceramic",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula.",
-    "stock": 10,
-    "price": 14.5
+  "name": "Recyclable cup",
+  "color": "Green",
+  "material": "Plastic",
+  "description": "vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam",
+  "stock": 5,
+  "price": 5.99
 }
 ```
