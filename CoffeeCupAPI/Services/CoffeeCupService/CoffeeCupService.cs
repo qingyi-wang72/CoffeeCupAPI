@@ -16,11 +16,6 @@
         [HttpGet]
         public async Task<List<CoffeeCup>> GetCoffeeCups()
         {
-            //var serResponse = new ServiceResponse<List<CoffeeCup>>();
-            //var coffeeCups = await _context.CoffeeCups.ToListAsync();
-            //serResponse.Data = coffeeCups;
-            //serResponse.Message = "Successfully get all the coffee cups";
-            //return serResponse;
             var coffeeCups = await _context.CoffeeCups.ToListAsync();
             return coffeeCups;
         }
@@ -28,40 +23,35 @@
         // GET: api/CoffeeCups/{id}
         // List the corresponding coffee cup by the given id
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<CoffeeCup>> GetCoffeeCup(int id)
+        public async Task<CoffeeCup?> GetCoffeeCup(int id)
         {
-            var serResponse = new ServiceResponse<CoffeeCup>();
-
-            try
-            {
-                var coffeeCup = await _context.CoffeeCups.FindAsync(id);
-                if (coffeeCup is null)
-                    throw new Exception($"GET error: coffeeCup with id {id} not found");
-                serResponse.Data = coffeeCup;
-                serResponse.Message = $"Successfully get the coffee cup with id {id}";
-            }
-            catch (Exception ex)
-            {
-                serResponse.Success = false;
-                serResponse.Message = ex.Message;
-            }
-
-            return serResponse;
+            var coffeeCup = await _context.CoffeeCups.FindAsync(id);
+            if (coffeeCup != null)
+                return coffeeCup;
+            return null;
         }
 
+        // POST: api/CoffeeCups
+        // add a new coffee cup
+        [HttpPost]
+        public async Task<List<CoffeeCup>> AddCoffeeCup(CoffeeCupReqModel reqCoffeeCup)
+        {
+
+            _context.CoffeeCups.Add(_mapper.Map<CoffeeCup>(reqCoffeeCup));
+            await _context.SaveChangesAsync();
+            var coffeeCups = await _context.CoffeeCups.ToListAsync();
+            return coffeeCups;
+        }
+
+        
         // PUT: api/CoffeeCups/{id}
         // Update the corresponding coffee cup by the given id
         [HttpPut("{id}")]
-        public async Task<ServiceResponse<List<CoffeeCup>>> UpdateCoffeeCup(int id, PutCoffeeCupDto reqCoffeeCup)
+        public async Task<List<CoffeeCup>?> UpdateCoffeeCup(int id, CoffeeCupReqModel reqCoffeeCup)
         {
-            var serResponse = new ServiceResponse<List<CoffeeCup>>();
-
-            try
+            var coffeeCup = await _context.CoffeeCups.FindAsync(id);
+            if (coffeeCup != null)
             {
-                var coffeeCup = await _context.CoffeeCups.FindAsync(id);
-                if (coffeeCup is null)
-                    throw new Exception($"PUT error: coffeeCup with id {id} not found");
-
                 coffeeCup.Name = reqCoffeeCup.Name;
                 coffeeCup.Color = reqCoffeeCup.Color;
                 coffeeCup.Material = reqCoffeeCup.Material;
@@ -69,64 +59,27 @@
                 coffeeCup.Stock = reqCoffeeCup.Stock;
                 coffeeCup.Price = reqCoffeeCup.Price;
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // exception
                 var coffeeCups = await _context.CoffeeCups.ToListAsync();
-                serResponse.Data = coffeeCups;
-                serResponse.Message = $"Successfully update the coffee cup with id {id}";
+                return coffeeCups;
             }
-            catch (Exception ex)
-            {
-                serResponse.Success = false;
-                serResponse.Message = ex.Message;
-            }
-
-            return serResponse;
+            return null;
         }
-
-        // POST: api/CoffeeCups
-        // add a new coffee cup
-        [HttpPost]
-        public async Task<ServiceResponse<List<CoffeeCup>>> AddCoffeeCup(PostCoffeeCupDto reqCoffeeCup)
-        {
-            var serResponse = new ServiceResponse<List<CoffeeCup>>();
-
-            _context.CoffeeCups.Add(_mapper.Map<CoffeeCup>(reqCoffeeCup));
-            await _context.SaveChangesAsync();
-
-            var coffeeCups = await _context.CoffeeCups.ToListAsync();
-            serResponse.Data = coffeeCups;
-            serResponse.Message = $"Successfully add a coffee cup";
-
-            return serResponse;
-        }
-
+        
         // DELETE: api/CoffeeCups/{id}
         // delete the corresponding coffee cup by the given id
         [HttpDelete("{id}")]
-        public async Task<ServiceResponse<List<CoffeeCup>>> DeleteCoffeeCup(int id)
+        public async Task<List<CoffeeCup>?> DeleteCoffeeCup(int id)
         {
-            var serResponse = new ServiceResponse<List<CoffeeCup>>();
-
-            try
+            var coffeeCup = await _context.CoffeeCups.FindAsync(id);
+            if (coffeeCup != null)
             {
-                var coffeeCup = await _context.CoffeeCups.FindAsync(id);
-                if (coffeeCup is null)
-                    throw new Exception($"DELETE error: coffeeCup with id {id} not found");
-
                 _context.CoffeeCups.Remove(coffeeCup);
                 await _context.SaveChangesAsync();
-
                 var coffeeCups = await _context.CoffeeCups.ToListAsync();
-                serResponse.Data = coffeeCups;
-                serResponse.Message = $"Successfully detele a coffee cup with id {id}";
+                return coffeeCups;
             }
-            catch (Exception ex)
-            {
-                serResponse.Success = false;
-                serResponse.Message = ex.Message;
-            }
-
-            return serResponse;
+            return null;
         }
     }
 }

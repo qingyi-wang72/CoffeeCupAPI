@@ -4,7 +4,7 @@
 	{
 		public AutoMapperProfile()
 		{
-			CreateMap<PostCoffeeCupDto, CoffeeCup>();
+			CreateMap<CoffeeCupReqModel, CoffeeCup>();
 		}
 	}
 }

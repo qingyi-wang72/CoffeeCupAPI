@@ -22,6 +22,8 @@
     </PackageReference>
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="FluentAssertions" Version="6.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,16 +32,12 @@
 
   <ItemGroup>
     <None Remove="Systems\" />
-    <None Remove="Helpers\" />
     <None Remove="Fixtures\" />
     <None Remove="Systems\Controllers\" />
-    <None Remove="Systems\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Systems\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Fixtures\" />
     <Folder Include="Systems\Controllers\" />
-    <Folder Include="Systems\Services\" />
   </ItemGroup>
 </Project>

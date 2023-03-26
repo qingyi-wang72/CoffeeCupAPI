@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CoffeeCupAPI.Models;
 
 namespace CoffeeCupAPI.Controllers
 {
@@ -14,10 +7,14 @@ namespace CoffeeCupAPI.Controllers
     public class CoffeeCupsController : ControllerBase
     {
         private readonly ICoffeeCupService _coffeeCupService;
+        private readonly ILogger<CoffeeCupsController> _logger;
 
-        public CoffeeCupsController(ICoffeeCupService coffeeCupService)
+        public CoffeeCupsController(
+            ICoffeeCupService coffeeCupService,
+            ILogger<CoffeeCupsController> logger)
         {
             _coffeeCupService = coffeeCupService;
+            _logger = logger;
         }
 
         // GET: api/CoffeeCups
@@ -25,52 +22,106 @@ namespace CoffeeCupAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCoffeeCups()
         {
-            var serResult = await _coffeeCupService.GetCoffeeCups();
-
-            if (serResult.Any())
-                return Ok(serResult);
-            return NotFound();
+            try
+            {
+                var result = await _coffeeCupService.GetCoffeeCups();
+                if (result.Any())
+                    return Ok(result);
+                return NotFound("Coffee cups not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong inside GetCoffeeCups action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // GET: api/CoffeeCups/{id}
         // List the corresponding coffee cup by the given id
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<CoffeeCup>>> GetCoffeeCup(int id)
+        public async Task<IActionResult> GetCoffeeCup(int id)
         {
-            var serResult = await _coffeeCupService.GetCoffeeCup(id);
-            if (serResult.Data is null)
-                return NotFound(serResult);
-            return Ok(serResult);
-        }
-
-        // PUT: api/CoffeeCups/{id}
-        // Update the corresponding coffee cup by the given id
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> UpdateCoffeeCup(int id, [FromBody]PutCoffeeCupDto coffeeCup)
-        {
-            var serResult = await _coffeeCupService.UpdateCoffeeCup(id, coffeeCup);
-            if (serResult.Data is null)
-                return NotFound(serResult);
-            return Ok(serResult);
+            try
+            {
+                var result = await _coffeeCupService.GetCoffeeCup(id);
+                if (result != null)
+                    return Ok(result);
+                return NotFound($"Coffee cup with id {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong inside GetCoffeeCup action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // POST: api/CoffeeCups
         // add a new coffee cup
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> AddCoffeeCup([FromBody]PostCoffeeCupDto coffeeCup)
+        public async Task<IActionResult> AddCoffeeCup([FromBody]CoffeeCupReqModel coffeeCup)
         {
-            return Ok(await _coffeeCupService.AddCoffeeCup(coffeeCup));
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _coffeeCupService.AddCoffeeCup(coffeeCup);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong inside AddCoffeeCup action: {ex.Message}");
+                return StatusCode(500,"Internal Server Error");
+            }
         }
 
-        // DELETE: api/CoffeeCups/{id}
-        // delete the corresponding coffee cup by the given id
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<CoffeeCup>>>> DeleteCoffeeCup(int id)
+        // PUT: api/CoffeeCups/{id}
+        // Update the corresponding coffee cup by the given id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCoffeeCup(int id, [FromBody] CoffeeCupReqModel coffeeCup)
         {
-            var serResult = await _coffeeCupService.DeleteCoffeeCup(id);
-            if (serResult.Data is null)
-                return NotFound(serResult);
-            return Ok(serResult);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var findCoffeeCup = await _coffeeCupService.GetCoffeeCup(id);
+                if (findCoffeeCup == null)
+                    return NotFound($"Coffee cup with id {id} not found.");
+
+                var result = await _coffeeCupService.UpdateCoffeeCup(id, coffeeCup);
+                if (result != null)
+                    return Ok(result);
+                return NotFound($"Coffee cup with id {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong inside UpdateCoffeeCup action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        //// DELETE: api/CoffeeCups/{id}
+        //// delete the corresponding coffee cup by the given id
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCoffeeCup(int id)
+        {
+            try
+            {
+                var findCoffeeCup = await _coffeeCupService.GetCoffeeCup(id);
+                if (findCoffeeCup == null)
+                    return NotFound($"Coffee cup with id {id} not found.");
+
+                var result = await _coffeeCupService.DeleteCoffeeCup(id);
+                if (result != null)
+                    return Ok(result);
+                return NotFound($"Coffee cup with id {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong inside DeleteCoffeeCup action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
     }
 }

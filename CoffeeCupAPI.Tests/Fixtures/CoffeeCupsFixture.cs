@@ -36,6 +36,30 @@ namespace CoffeeCupAPI.Tests.Fixtures
                 },
             };
         }
+
+        public static CoffeeCup GetTestCoffeeCup()
+        {
+            return new CoffeeCup {
+                Id = 1,
+                Name = "Bunny cup",
+                Color = "White",
+                Material = "Ceramic",
+                Description = "convallis convallis tellus id interdum velit laoreet id donec ultrices",
+                Stock = 200,
+                Price = (float)4.99,
+               
+            };
+        }
+
+        public static CoffeeCupReqModel reqModelWithMissingField = new CoffeeCupReqModel
+        {
+            Color = "White",
+            Material = "Ceramic",
+            Description = "convallis convallis tellus id interdum velit laoreet id donec ultrices",
+            Stock = 200,
+            Price = (float)4.99,
+        };
+
     }
 }
 

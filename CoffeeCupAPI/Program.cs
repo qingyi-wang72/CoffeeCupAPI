@@ -1,11 +1,14 @@
-﻿global using CoffeeCupAPI.Dtos;
-global using CoffeeCupAPI.Models;
+﻿global using CoffeeCupAPI.Models;
 global using CoffeeCupAPI.Controllers;
+global using CoffeeCupAPI.Models.RequestModels;
 global using CoffeeCupAPI.Services.CoffeeCupService;
 global using AutoMapper;
-global using System.Data.SqlClient;
+global using System.Net;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Logging;
 global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +21,8 @@ builder.Services.AddSwaggerGen();
 // register the service
 builder.Services.AddScoped<ICoffeeCupService, CoffeeCupService>();
 
-// connection string
-var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("CoffeeCupContext"));
-conStrBuilder.Password = builder.Configuration["Password"];
-var conStr = conStrBuilder.ConnectionString;
-
 // register the context
-builder.Services.AddDbContext<CoffeeCupContext>(options => options.UseSqlServer(conStr));
+builder.Services.AddDbContext<CoffeeCupContext>(options => options.UseInMemoryDatabase("CoffeeCupsDb"));
 
 // register the AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -32,15 +30,10 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoffeeCup API V1");
-        c.RoutePrefix = string.Empty;
-    });
 }
 
 app.UseHttpsRedirection();
