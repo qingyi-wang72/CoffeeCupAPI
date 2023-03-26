@@ -32,7 +32,7 @@ namespace CoffeeCupAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went wrong inside GetCoffeeCups action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, "Internal Server Error.");
             }
         }
 
@@ -51,7 +51,7 @@ namespace CoffeeCupAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went wrong inside GetCoffeeCup action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, "Internal Server Error.");
             }
         }
 
@@ -71,7 +71,7 @@ namespace CoffeeCupAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went wrong inside AddCoffeeCup action: {ex.Message}");
-                return StatusCode(500,"Internal Server Error");
+                return StatusCode(500,"Internal Server Error.");
             }
         }
 
@@ -97,7 +97,7 @@ namespace CoffeeCupAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went wrong inside UpdateCoffeeCup action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, "Internal Server Error.");
             }
         }
 
@@ -120,7 +120,7 @@ namespace CoffeeCupAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went wrong inside DeleteCoffeeCup action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, "Internal Server Error.");
             }
         }
     }
