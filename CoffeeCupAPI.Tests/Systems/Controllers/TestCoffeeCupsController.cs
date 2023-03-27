@@ -110,7 +110,7 @@ namespace CoffeeCupAPI.Tests.Systems.Controllers
 
             // Assert
             var objectResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(400, objectResult.Value);
+            Assert.Equal(400, objectResult.StatusCode);
         }
     }
 }

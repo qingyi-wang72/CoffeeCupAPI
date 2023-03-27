@@ -4,6 +4,7 @@ global using CoffeeCupAPI.Models.RequestModels;
 global using CoffeeCupAPI.Services.CoffeeCupService;
 global using AutoMapper;
 global using System.Net;
+global using System.Data.SqlClient;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
@@ -21,8 +22,13 @@ builder.Services.AddSwaggerGen();
 // register the service
 builder.Services.AddScoped<ICoffeeCupService, CoffeeCupService>();
 
-// register the context
-builder.Services.AddDbContext<CoffeeCupContext>(options => options.UseInMemoryDatabase("CoffeeCupsDb"));
+// register the context (in-memory database)
+builder.Services.AddDbContext<CoffeeCupContext>(
+    options => options.UseInMemoryDatabase("CoffeeCupsDb"));
+
+// register the context (presistent database)
+// builder.Services.AddDbContext<CoffeeCupContext>(
+//     options => options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeCupContext")));
 
 // register the AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

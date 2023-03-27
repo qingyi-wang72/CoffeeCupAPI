@@ -1,6 +1,6 @@
 # CoffeeCupAPI
 
-This is a project about making a web api which can provide coffee cups according to the user's requests. It is built in the context of an e-commerce management dashboard where administrators can perform basic CRUD operations on coffee cup products.
+The project uses TDD to build a web api which can provide coffee cups according to the user's requests. It is built in the context of an e-commerce management dashboard where administrators can perform basic CRUD operations on coffee cup products.
 
 ## Table of ontents
 - [Getting Started](#Getting-Started)
@@ -19,15 +19,63 @@ This is a project about making a web api which can provide coffee cups according
 ## Getting Started
 Use these instructions to run and test the project locally.
 
-### Prerequisties
+### Tools
+- Visual Studio Code for Mac
+- .NET 7.0
 
 ### Installation
-
+1. Clone the repository
+2. At the root directory, restore the required packages by running:
+    ```csharp
+    dotnet restore
+    ```
+3. Build the solution by running:
+    ```csharp
+    dotnet build
+    ```
+4. At the CoffeeCupAPI directory, launch the project by running:
+    ```csharp
+    cd CoffeeCupAPI
+    dotnet run
+    ```
+    Launch http://localhost:5002/swagger/index.html in your browser to view the Swagger UI.
+5. At the CoffeeCupAPI.Tests directory, test the project by running:
+    ```csharp
+    cd CoffeeCupAPI.Tests
+    dotnet test
+    ```
 ### Database Usage
 
-### Run Locally
+After completing the Installation process, the project is able to run locally using an In-Memory Database. If you would like to use a presistent database, follow these instructions before launching the project.
 
-### Test Locally
+1. Since the connection string contains sensitive information that needs to be protected, secret your connection string using the Secret Manage tool.
+    - Eable the Secret Manager by running:
+        ```csharp
+        dotnet user-secrets init
+        ```
+    - Create a secret connection string by running:
+        ```csharp
+        dotnet user-secrets set ConnectionStrings:CoffeeCupContext "<yourConnectionStrings>"
+        ```
+2. Update the _program.cs_ file.
+    ```csharp
+    // register the context (in-memory database)
+    // builder.Services.AddDbContext<CoffeeCupContext>(
+    //     options => options.UseInMemoryDatabase("CoffeeCupsDb"));
+
+    // register the context (presistent database)
+    builder.Services.AddDbContext<CoffeeCupContext>(
+        options => options.UseSqlServer(
+            builder.Configuration.GetConnectionString("CoffeeCupContext")));
+    ```
+3. Add the first migration named InitalCrete.
+    ```csharp
+    dotnet ef migrations add InitialCreate
+    ```
+4. Create your database and schema from the migration.
+    ```csharp
+    dotnet ef database update
+    ```
 
 • [Back to ToC](#-table-of-contents) •
 
@@ -39,14 +87,12 @@ Use these instructions to run and test the project locally.
 
 ## Project Highlights
 
-### Technologies
+- Use **Entity Framework** to store data presistantly, retrieve data and implement mapping between the CoffeeCup entity and the database table.
+- Use **AutoMapper** to implement mapping between DTOs and the CoffeeCup entity.
+- Use **Moq** to perform unit testing and create mocks representing each injected services.
 
-Technologies that have been used for designing and developing the web API.
-- **AutoMapper**
-- **AutoMapper**
-
-Technologies that have been used for testing the web API.
-- **Mock**
+- Use **design principle** such as **dependency inversion principle** to decouple the high level and low level modules.
+- Use **design pattern** such as **MVC**, **dependency Injection**, logging, validation, and exception handling. 
 
 • [Back to ToC](#-table-of-contents) •
 
@@ -234,30 +280,59 @@ This project involves the HTTP status codes listed below to indicate the success
 ### Request 
 
 ```json
+{
+  "name": "Bunny cup",
+  "color": "White",
+  "material": "Ceramic",
+  "description": "",
+  "stock": 200,
+  "price": 3.99
+}
 ```
 
 ### Response
 
-- 200
+- Status code `200`
     ```json
-    
+    [
+        {
+            "id": 3,
+            "name": "Bunny Cup",
+            "color": "White",
+            "material": "Ceramic",
+            "description": "convallis convallis tellus id interdum velit laoreet id donec ultrices",
+            "stock": 200,
+            "price": 4.99
+        },
+        // ... more data
+    ]
     ```
 
-- 400
+- Status code `400`
     ```json
-    
+    {
+        "errors": {
+            "Name": [
+                "The Name field is required."
+            ],
+            "Price": [
+                "The field Price must be between 0 and 3.4028234663852886E+38."
+            ]
+        }
+    }
     ```
 
-- 404
-    ```json
-    Coffee cup with id {id} not found.
-    ```
+- Status code `404`
+    - A CoffeeCup with _Id_ does not exist in the database.
+        ```json
+        Coffee cup with id {id} not found.
+        ```
+    - There is an empty CoffeeCup list in the database.
+        ```json
+        Coffee cups not found.
+        ```
 
-    ```json
-    Coffee cups not found.
-    ```
-
-- 500
+- Status code `500`
     ```json
     Internal Server Error.
     ```
@@ -271,8 +346,13 @@ This project involves the HTTP status codes listed below to indicate the success
 
 
 ## Unit Testing
-
-This project 
+The unit testing for the web API considers 6 test cases based on different scenarios.
+    - Tests if the _GetCoffeeCups_ action succeeds and returns a status code of `200`.
+    - Tests if the _AddCoffeeCup_ action fails on invalid user input and returns a status code of `400`.
+    - Tests if the _GetCoffeeCups_ action fails and returns a status code of `404`.
+    - Tests if the _GetCoffeeCups_ action fails with an Internal server error and returns a status code of `500`.
+    - Tests if the _GetCoffeeCups_ action succeeds and returns a list of CoffeeCup.
+    - Tests if the _GetCoffeeCup_ action succeeds and returns a CoffeeCup with the _Id_ requeted by the user.
 
 • [Back to ToC](#-table-of-contents) •
 
