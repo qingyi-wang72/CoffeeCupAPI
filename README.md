@@ -2,7 +2,7 @@
 
 The project uses TDD to build a web api which can provide coffee cups according to the user's requests. It is built in the context of an e-commerce management dashboard where administrators can perform basic CRUD operations on coffee cup products.
 
-## Table of ontents
+## Table of Contents
 - [Getting Started](#Getting-Started)
 - [Project Highlights](#Project-Highlights)
 - [Entity Definition](#Entity-Definition)
@@ -77,7 +77,6 @@ After completing the Installation process, the project is able to run locally us
     dotnet ef database update
     ```
 
-• [Back to ToC](#Table-of-ontents) •
 
 
 
@@ -94,7 +93,6 @@ After completing the Installation process, the project is able to run locally us
 - Use **design principle** such as **dependency inversion principle** to decouple the high level and low level modules.
 - Use **design pattern** such as **MVC**, **dependency Injection**, logging, validation, and exception handling. 
 
-• [Back to ToC](#-table-of-contents) •
 
 
 
@@ -113,7 +111,6 @@ After completing the Installation process, the project is able to run locally us
 - **Stock**: inventory of products `int`
 - **Price**: individual product price `float`
 
-• [Back to ToC](#-table-of-contents) •
 
 
 
@@ -135,11 +132,11 @@ POST /api/CoffeeCups
 See [Examples of Request/Response](#Examples-of-Request/Response)
 
 ##### Response
-###### Success response
+Success response:
 - **Code**: 200
 - **Content**: return a list of CoffeeCup objects including the CoffeeCup just created.
 
-###### Error response
+Error response:
 - **Code**: 400/404/500
 - **Content**: throw an error message; see [Examples of Request/Response](#Examples-of-Request/Response). 
 
@@ -161,11 +158,11 @@ GET /api/CoffeeCups/:id
 - **Id**: product id `int` _(required)_
 
 ##### Response
-###### Success response
+Success response:
 - **Code**: 200
 - **Content**: return a CoffeeCup object with the given id.
 
-###### Error response
+Error response:
 - **Code**: 404/500
 - **Content**: throw an error message; see [Examples of Request/Response](#Examples-of-Request/Response). 
 
@@ -187,11 +184,11 @@ GET /api/CoffeeCups
 None
 
 ##### Response
-###### Success response
+Success response:
 - **Code**: 200
 - **Content**: return a list of CoffeeCup objects.
 
-###### Error response
+Error response:
 - **Code**: 404/500
 - **Content**: throw an error message; see [Examples of Request/Response](#Examples-of-Request/Response). 
 
@@ -214,11 +211,11 @@ PUT /api/CoffeeCups/:id
 See [Examples of Request/Response](#Examples-of-Request/Response)
 
 ##### Response
-###### Success response
+Success response:
 - **Code**: 200
 - **Content**: return a list of CoffeeCup objects including the CoffeeCup just updated.
 
-###### Error response
+Error response:
 - **Code**: 400/404/500
 - **Content**: throw an error message; see [Examples of Request/Response](#Examples-of-Request/Response). 
 
@@ -240,15 +237,14 @@ Delete /api/CoffeeCups/:id
 - **Id**: product id `int` _(required)_
 
 ##### Response
-###### Success response
+Success response:
 - **Code**: 200
 - **Content**: return a list of CoffeeCup objects excluding the CoffeeCup just deleted.
 
-###### Error response
+Error response:
 - **Code**: 404/500
 - **Content**: throw an error message; see [Examples of Request/Response](#Examples-of-Request/Response). 
 
-• [Back to ToC](#-table-of-contents) •
 
 
 
@@ -266,7 +262,6 @@ This project involves the HTTP status codes listed below to indicate the success
 |   `404` - Not Found       |   The requested resource could not be found.   |
 |   `500` - Internal Server Error   |   Something went wrong and the server does not know how to handle it.   |    
 
-• [Back to ToC](#-table-of-contents) •
 
 
 
@@ -324,20 +319,20 @@ This project involves the HTTP status codes listed below to indicate the success
 
 - Status code `404`
     - A CoffeeCup with _Id_ does not exist in the database.
-        ```json
+        ```text
         Coffee cup with id {id} not found.
         ```
     - There is an empty CoffeeCup list in the database.
-        ```json
+        ```text
         Coffee cups not found.
         ```
 
 - Status code `500`
-    ```json
+    ```text
     Internal Server Error.
     ```
 
-• [Back to ToC](#-table-of-contents) •
+ 
 
 
 
@@ -347,14 +342,14 @@ This project involves the HTTP status codes listed below to indicate the success
 
 ## Unit Testing
 The unit testing for the web API considers 6 test cases based on different scenarios.
-    - Tests if the _GetCoffeeCups_ action succeeds and returns a status code of `200`.
-    - Tests if the _AddCoffeeCup_ action fails on invalid user input and returns a status code of `400`.
-    - Tests if the _GetCoffeeCups_ action fails and returns a status code of `404`.
-    - Tests if the _GetCoffeeCups_ action fails with an Internal server error and returns a status code of `500`.
-    - Tests if the _GetCoffeeCups_ action succeeds and returns a list of CoffeeCup.
-    - Tests if the _GetCoffeeCup_ action succeeds and returns a CoffeeCup with the _Id_ requeted by the user.
+- Tests if the _GetCoffeeCups_ action succeeds and returns a status code of `200`.
+- Tests if the _AddCoffeeCup_ action fails on invalid user input and returns a status code of `400`.
+- Tests if the _GetCoffeeCups_ action fails and returns a status code of `404`.
+- Tests if the _GetCoffeeCups_ action fails with an Internal server error and returns a status code of `500`.
+- Tests if the _GetCoffeeCups_ action succeeds and returns a list of CoffeeCup.
+- Tests if the _GetCoffeeCup_ action succeeds and returns a CoffeeCup with the _Id_ requeted by the user.
 
-• [Back to ToC](#-table-of-contents) •
+
 
 
 
