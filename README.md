@@ -77,7 +77,7 @@ After completing the Installation process, the project is able to run locally us
     dotnet ef database update
     ```
 
-• [Back to ToC](#-table-of-contents) •
+• [Back to ToC](#Table-of-ontents) •
 
 
 
